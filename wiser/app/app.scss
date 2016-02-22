@@ -1,0 +1,33 @@
+.panel-body {
+  background-color: #FDEBA3;
+}
+table {
+  border-collapse: collapse;
+  th {
+    text-align: center;
+    border: 2px solid black;
+    padding: 1em;
+    &.col-xs-2 {
+      &:hover {
+        background-color: rgba(148, 255, 35, 0.94);
+      }
+      &.cell-clicked {
+        background-color: #31B0D5;
+      }
+    }
+  }
+  td {
+    text-align: center;
+    border: 1px solid black;
+    padding: 0.10em;
+    p {
+      padding-top: 0.5em;
+    }
+  }
+}
+.logo{
+  padding: 0.5em;
+}
+.ok-btn{
+  width: 100%;
+}
