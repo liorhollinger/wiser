@@ -1,3 +1,29 @@
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="my-controller">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <label for="search">Search:</label>
+                        <input ng-model="q" id="search" class="form-control" placeholder="Filter text">
+                    </div>
+                    <div class="col-xs-4">
+                        <label for="search">items per page:</label>
+                        <input type="number" min="1" max="100" class="form-control" ng-model="pageSize">
+                    </div>
+                </div>
+                <br>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <div class="text-center">
+        <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)"
+                                 template-url="dirPagination.tpl.html"></dir-pagination-controls>
+    </div>
+</div>
 <div class="row marketing">
     <div class="panel panel-default panel-primary">
         <div class="panel-heading">
@@ -7,19 +33,19 @@
             <table class="col-xs-12">
                 <thead>
                 <tr>
-                    <th class="col-xs-2" ng-click="orderClicked('name')" ng-class='{"cell-clicked":name}'>Name</th>
-                    <th class="col-xs-2" ng-click="orderClicked('sku')" ng-class="{'cell-clicked':sku}">Inventory
+                    <th class="col-xs-2" ng-click="sortItems('name')" ng-class='{"cell-clicked":name}'>Name</th>
+                    <th class="col-xs-2" ng-click="sortItems('sku')" ng-class="{'cell-clicked':sku}">Inventory
                         number
                     </th>
-                    <th class="col-xs-2" ng-click="orderClicked('price')" ng-class="{'cell-clicked':price}">Price</th>
-                    <th class="col-xs-2" ng-click="orderClicked('category')" ng-class="{'cell-clicked':category}">
+                    <th class="col-xs-2" ng-click="sortItems('price')" ng-class="{'cell-clicked':price}">Price</th>
+                    <th class="col-xs-2" ng-click="sortItems('category')" ng-class="{'cell-clicked':category}">
                         Category
                     </th>
                     <th class="col-xs-1">Edit</th>
                     <th class="col-xs-1">Delete</th>
                 </tr>
                 </thead>
-                <tr ng-repeat="product in products |orderBy: currentOrder">
+                <tr dir-paginate="product in products | filter:q | itemsPerPage: pageSize |orderBy: currentOrder">
                     <td class="col-xs-2">{{product.name}}</td>
                     <td class="col-xs-2">{{product.sku}}</td>
                     <td class="col-xs-2">{{product.price | currency}}</td>
@@ -44,6 +70,13 @@
     </div>
 </div>
 
+<div>
+    <div class="text-center">
+        <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)"
+                                 template-url="dirPagination.tpl.html"></dir-pagination-controls>
+    </div>
+</div>
+
 <form ng-submit="editProduct()">
     <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
         <div class="modal-dialog">
@@ -56,7 +89,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Name:</label>
-                        <input class="form-control"  id="name" type="text" required placeholder="{{productOnfocus.name}}"
+                        <input class="form-control" id="name" type="text" required placeholder="{{productOnfocus.name}}"
                                ng-model="productToUpDate.name">
                     </div>
                     <div class="form-group">
@@ -65,7 +98,7 @@
                     </div>
                     <div class="form-group">
                         <label>Price:</label>
-                        <input class="form-control " type="number" required
+                        <input class="form-control " type="" required
                                placeholder="{{productOnfocus.price| currency}}"
                                ng-model="productToUpDate.price">
                     </div>
@@ -112,3 +145,4 @@
         </div>
     </div>
 </div>
+

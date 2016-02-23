@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('wiser', ['ngRoute'])
+var app = angular.module('wiser', ['ngRoute', 'angularUtils.directives.dirPagination'])
 
     .config(['$routeProvider', function ($routeProvider) {
         $routeProvider.
@@ -13,16 +13,29 @@ var app = angular.module('wiser', ['ngRoute'])
     .controller('WiserCtrl', ['$scope', '$http', function ($scope, $http) {
         $http.get('products.json').then(function (response) {
             $scope.products = response.data;
+            $scope.sortItems('price');
+
         });
 
-        $scope.orderClicked = function (currentParameter) {
-            $scope.currentOrder = currentParameter;
-            $scope.name = (currentParameter === 'name');
-            $scope.sku = (currentParameter === 'sku');
-            $scope.price = (currentParameter === 'price');
-            $scope.category = (currentParameter === 'category');
+        function compare(a, b) {
+            if (a[$scope.parameterToCompare] < b[$scope.parameterToCompare])
+                return -1;
+            else if (a[$scope.parameterToCompare] > b[$scope.parameterToCompare])
+                return 1;
+            else
+                return 0;
+        }
+
+        $scope.sortItems = function (parameter) {
+            $scope.parameterToCompare = parameter;
+            $scope.products.sort(compare);
+            $scope.name = (parameter === 'name');
+            $scope.sku = (parameter === 'sku');
+            $scope.price = (parameter === 'price');
+            $scope.category = (parameter === 'category');
         };
-        $scope.orderClicked('category');
+
+
 
         $scope.setProduct = function (product) {
             $scope.productOnfocus = product;
@@ -61,6 +74,10 @@ var app = angular.module('wiser', ['ngRoute'])
             });
             $('#edit').modal('hide');
         };
+
+        $scope.currentPage = 1;
+        $scope.pageSize = 10;
+        $scope.meals = [];
 
 
 // the code that follows is what i used to create the  row data.
